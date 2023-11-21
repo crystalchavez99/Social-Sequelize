@@ -42,5 +42,42 @@ describe('Social Sequelzie Test', () => {
         expect(deleted).toEqual(null)
     })
 
+    test('can create a profile', async () => {
+        const testProfile = await Profile.create({
+            "bio": "I'm a software engineer",
+            "profilePicture": "https://example.com/profile1.jpg",
+            "birthday": "1990-06-15"
+          });
+        expect(testProfile.bio).toBe("I'm a software engineer");
+    });
+
+    test('can read a profile', async() =>{
+        const testProfile = await Profile.findOne({where: {profilePicture:"https://example.com/profile1.jpg"}})
+        expect(testProfile.birthday).toBe("1990-06-15");
+    });
+
+    test('can get all profiles', async() =>{
+        const testProfile = await Profile.create({
+      "bio": "I love to travel",
+      "profilePicture": "https://example.com/profile2.jpg",
+      "birthday": "1985-09-28"
+    });
+        const allProfiles = await Profile.findAll();
+        expect(allProfiles.length).toBe(2)
+    });
+
+    test('can update a profile', async() =>{
+        const updateProfile = await Profile.findByPk(2);
+        await updateProfile.update({bio: "I love to swim!"});
+        expect(updateProfile.bio).toBe("I love to swim!")
+    })
+
+    test('can delete a profile', async() =>{
+        const profile = await Profile.findByPk(1);
+        await profile.destroy();
+        const deleted = await Profile.findByPk(1);
+        expect(deleted).toEqual(null)
+    })
+
 
 })
