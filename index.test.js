@@ -117,4 +117,41 @@ describe('Social Sequelzie Test', () => {
         expect(deleted).toEqual(null)
     })
 
+    test('can create a comment', async () => {
+        const testComment = await Comment.create({
+      "body": "Can you explain this point further?",
+      "createdAt": "2022-01-02T10:45:00Z"
+    });
+        expect(testComment.body).toBe("Can you explain this point further?");
+    });
+
+    test('can read a comment', async() =>{
+        const testComment = await Comment.findOne({where: {createdAt:"2022-01-02T10:45:00Z"}})
+        expect(testComment.body).toBe("Can you explain this point further?");
+    });
+
+    test('can get all comments', async() =>{
+       const testComment = await Comment.create({
+      "title": "Harvard Yard in the Spring",
+      "body": "Spring is finally here! Here's a shot of Harvard Yard.",
+      "createdAt": "2022-03-25T11:45:00.000Z"
+    });
+        const allCommentss = await Comment.findAll();
+        expect(allCommentss.length).toBe(2)
+    });
+
+    test('can update a comment', async() =>{
+        const updateComment = await Comment.findByPk(2);
+        await updateComment.update({body: "Thanks for sharing your thoughts I guess"});
+        expect(updateComment.body).toBe("Thanks for sharing your thoughts I guess")
+    })
+
+    test('can delete a comment', async() =>{
+        const comment = await Comment.findByPk(1);
+        await comment.destroy();
+        const deleted = await Comment.findByPk(1);
+        expect(deleted).toEqual(null)
+    })
+
+
 })
