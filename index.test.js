@@ -80,4 +80,41 @@ describe('Social Sequelzie Test', () => {
     })
 
 
+    test('can create a post', async () => {
+        const testPost = await Post.create({
+      "title": "New Song Release",
+      "body": "Check out my latest song on Spotify!",
+      "createdAt": "2022-03-27T16:20:00.000Z"
+    });
+        expect(testPost.body).toBe("Check out my latest song on Spotify!");
+    });
+
+    test('can read a post', async() =>{
+        const testPost = await Post.findOne({where: {createdAt:"2022-03-27T16:20:00.000Z"}})
+        expect(testPost.title).toBe("New Song Release");
+    });
+
+    test('can get all posts', async() =>{
+        const testPost = await Post.create({
+      "title": "Harvard Yard in the Spring",
+      "body": "Spring is finally here! Here's a shot of Harvard Yard.",
+      "createdAt": "2022-03-25T11:45:00.000Z"
+    });
+        const allPosts = await Post.findAll();
+        expect(allPosts.length).toBe(2)
+    });
+
+    test('can update a post', async() =>{
+        const updatePost = await Post.findByPk(2);
+        await updatePost.update({title: "Harvard Yard in the Fall"});
+        expect(updatePost.title).toBe("Harvard Yard in the Fall")
+    })
+
+    test('can delete a post', async() =>{
+        const post = await Post.findByPk(1);
+        await post.destroy();
+        const deleted = await Post.findByPk(1);
+        expect(deleted).toEqual(null)
+    })
+
 })
